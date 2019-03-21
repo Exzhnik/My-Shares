@@ -6,6 +6,7 @@ class Home extends StatefulWidget {
   const Home({Key key, this.user}) : super(key: key);
   final FirebaseUser user;
 
+  static String tag = 'home';
   @override
   _HomeState createState() => _HomeState();
 }
