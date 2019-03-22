@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:my_shares/pages/home.dart';
+import 'package:my_shares/setup/gradient.dart';
 
 class LoginPage extends StatefulWidget {
   static String tag = 'login-page';
@@ -97,33 +98,18 @@ class _LoginPageState extends State<LoginPage> {
     );
 
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: Center(
-        child: Form(
-          key: _formKey,
-          child: ListView(
-            shrinkWrap: true,
-            padding: EdgeInsets.only(left: 24, right: 24),
-            children: <Widget>[
-              logo,
-              SizedBox(
-                height: 48.0,
-              ),
-              email,
-              SizedBox(
-                height: 8.0,
-              ),
-              password,
-              SizedBox(
-                height: 24.0,
-              ),
-              butLogin,
-              reg,
-              labForgot
-            ],
-          ),
-        ),
-      ),
-    );
+        body: Stack(
+      fit: StackFit.expand,
+      children: <Widget>[
+        new LogGradient(
+            formKey: _formKey,
+            logo: logo,
+            email: email,
+            password: password,
+            butLogin: butLogin,
+            reg: reg,
+            labForgot: labForgot),
+      ],
+    ));
   }
 }
