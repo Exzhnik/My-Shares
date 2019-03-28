@@ -3,6 +3,8 @@ import 'package:my_shares/setup/signin.dart';
 import 'package:my_shares/pages/home.dart';
 
 
+
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -18,7 +20,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primaryColor: Color(0xFF5C6DC0),
       ),
       home: LoginPage(),
     );

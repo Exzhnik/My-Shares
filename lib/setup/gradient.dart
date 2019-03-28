@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 class LogGradient extends StatelessWidget {
   const LogGradient({
     Key key,
@@ -25,7 +26,7 @@ class LogGradient extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [const Color(0xFF5032b6), const Color(0xFFb765d3)],
+          colors: [const Color(0xFFEF9A9A), const Color(0xFF5C6DC0)],
           begin: Alignment.bottomCenter,
           end: Alignment.topCenter,
         ),
