@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_shares/setup/sharesList.dart';
+import 'package:my_shares/setup/shares.dart';
 
 
 class SearchData extends SearchDelegate<String> {
