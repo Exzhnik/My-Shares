@@ -32,3 +32,4 @@ Map<String, dynamic> _$SharesToJson(Shares instance) => <String, dynamic>{
       's9MatchScore': instance.s9MatchScore,
       'isSelected': instance.isSelected
     };
+
