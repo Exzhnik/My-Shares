@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_shares/setup/data_search.dart';
+import 'package:my_shares/setup/shares.dart';
 
 class Home extends StatefulWidget {
   const Home({Key key, this.user, this.title}) : super(key: key);
@@ -16,133 +17,169 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
-  String url =
-      'https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=AMD&apikey=GGGY02OO6F2TGGOC';
-  List data;
-  Future<String> makeRequest() async {
-    var response = await http
-        .get(Uri.encodeFull(url), headers: {"Accept": "application/json"});
+// const key = 'GGGY02OO6F2TGGOC';
 
+class _HomeState extends State<Home> {
+  List<Shares> stock = [];
+  List<Shares> search = [];
+  var loading = false;
+
+  Future<Null> fetchData() async {
     setState(() {
-      var extractdata = json.decode(response.body);
-      data = extractdata["bestMatches"];
+      loading = true;
     });
+    stock.clear();
+
+    final response =
+        await http.get('https://api.iextrading.com/1.0/ref-data/symbols');
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      setState(() {
+        for (Map i in data) {
+          stock.add(Shares.fromJson(i));
+          loading = false;
+        }
+      });
+    }
+  }
+
+  TextEditingController controller = new TextEditingController();
+
+  onSearch(String text) async {
+    search.clear();
+    if (text.isEmpty) {
+      setState(() {});
+      return;
+    }
+
+    stock.forEach((f) {
+      if (f.name.contains(text) ||
+          f.symbol.toString().contains(text.toUpperCase())) search.add(f);
+    });
+
+    setState(() {});
   }
 
   @override
   void initState() {
-    this.makeRequest();
+    // TODO: implement initState
+    super.initState();
+    fetchData();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color(0xFF5C6DC0),
-        appBar: AppBar(
-          title: Center(child: Text('${widget.user.email}')),
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.search),
-              onPressed: () {
-                showSearch(context: context, delegate: SearchData());
-              },
-            )
+      backgroundColor: Color(0xFF5C6DC0),
+      appBar: AppBar(
+        title: Center(child: Text('TEST')),
+      ),
+      body: Container(
+        child: Column(
+          children: <Widget>[
+            Container(
+              padding: EdgeInsets.all(10.0),
+              color: Color(0xFF5C6DC0),
+              child: Card(
+                child: ListTile(
+                  leading: Icon(Icons.search),
+                  title: TextField(
+                    textCapitalization: TextCapitalization.words,
+                    controller: controller,
+                    onChanged: onSearch,
+                    decoration: InputDecoration(
+                        hintText: "Search", border: InputBorder.none),
+                  ),
+                  trailing: IconButton(
+                    onPressed: () {
+                      controller.clear();
+                      onSearch('');
+                    },
+                    icon: Icon(Icons.cancel),
+                  ),
+                ),
+              ),
+            ),
+            loading
+                ? Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : Expanded(
+                    child: search.length != 0 || controller.text.isNotEmpty
+                        ? new ListTwo(search: search)
+                        : ListView.builder(
+                            itemCount: stock.length,
+                            itemBuilder: (context, index) {
+                              final sto = stock[index];
+                              var networkImage = NetworkImage(
+                                  'https://storage.googleapis.com/iex/api/logos/${sto.symbol}.png');
+                              return Container(
+                                  child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  CircleAvatar(
+                                    backgroundImage: networkImage,
+                                    radius: 30,
+                                  ),
+                                  SizedBox(
+                                    height: 2.0,
+                                  ),
+                                  Text(
+                                    sto.name,
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ));
+                            },
+                          ),
+                  )
           ],
         ),
-        body: Container(
-          decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [const Color(0xFFEF9A9A), const Color(0xFF5C6DC0)],
-          begin: Alignment.bottomCenter,
-          end: Alignment.topCenter,
-        ),
       ),
-          child: new ListView.builder(
-              itemCount: data == null ? 0 : data.length,
-              itemBuilder: (BuildContext context, i) {
-                return new ListTile(
-                  title: new Text(data[i]["2. name"]),
-                );
-              }),
-        ));
+    );
   }
 }
-// String url ='https://randomuser.me/api/?results=15';
-// List data;
-// Future<String> makeRequest() async{
-//   var response = await http.get(Uri.encodeFull(url), headers: {"Accept": "application/json"});
 
-//   setState(() {
-//    var extra = JsonDecoder().convert(response.body);
-//    data = extra["results"];
-//   });
+class ListTwo extends StatelessWidget {
+  const ListTwo({
+    Key key,
+    @required this.search,
+  }) : super(key: key);
 
-//   @override
-//   void initState(){
-//     this.makeRequest();
-//   }
-// }
-// List<Shares> list =List();
-// var  isLoading = false;
-// List<Shares> share = [];
-// String url ='https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=BA&apikey=demo';
+  final List<Shares> search;
 
-// Future<String> loadSharesList() async {
-//   http.Response responese = await http.get(
-//       'https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=BA&apikey=demo');
-//   String content = responese.body;
-//   List collection = json.decode(content);
-//   List<Shares> _share =
-//       collection.map((json) => Shares.fromJson(json)).toList();
-
-//   setState(() {
-//     share = _share;
-//   });
-
-//   void initState() {
-//     loadSharesList();
-//     super.initState();
-//   }
-// }
-// _fetchData() async{
-//   setState(() {
-//    isLoading = true;
-//   });
-//   final response= await http.get('https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=BA&apikey=demo');
-//   if (response.statusCode == 200){
-//     list = (json.decode(response.body) as List).map((data)=> Shares.fromJson(data)).toList();
-//     setState(() {
-//      isLoading = false;
-//     });
-//   } else{
-//     throw Exception('Faled');
-//   }
-// }
-
-// @override
-// Widget build(BuildContext context) {
-//   return Scaffold(
-//     backgroundColor: Colors.white,
-//     appBar: AppBar(
-//       title: Center(child: Text('${widget.user.email}')),
-//       actions: <Widget>[
-//         IconButton(
-//           icon: Icon(Icons.search),
-//           onPressed: () {
-//             showSearch(context: context, delegate: SearchData());
-//           },
-//         )
-//       ],
-//     ),
-//     body: ListView.builder(
-//       itemCount:data==null ? 0 : data.length,
-//       itemBuilder: (context, index){
-//         return ListTile(
-//           contentPadding: EdgeInsets.all(10.0),
-//           title: Text(data[index]["name"]),
-//         );
-//       },
-//     )
-//   );
-// }
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: search.length,
+      itemBuilder: (context, index) {
+        final sto2 = search[index];
+        var networkImage = NetworkImage(
+            'https://storage.googleapis.com/iex/api/logos/${sto2.symbol}.png');
+        return Container(
+            child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            CircleAvatar(
+              backgroundImage: networkImage,
+              radius: 30,
+            ),
+            SizedBox(
+              height: 2.0,
+            ),
+            Text(
+              sto2.name,
+              style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold),
+            ),
+          ],
+        ));
+      },
+    );
+  }
+}
