@@ -4,8 +4,9 @@ import 'package:http/http.dart' as http;
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:my_shares/setup/data_search.dart';
+import 'package:my_shares/pages/stocks.dart';
 import 'package:my_shares/setup/shares.dart';
+import 'package:my_shares/setup/previos.dart';
 
 class Home extends StatefulWidget {
   const Home({Key key, this.user, this.title}) : super(key: key);
@@ -21,6 +22,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   List<Shares> stock = [];
+  List<Previos> sto = [];
   List<Shares> search = [];
   var loading = false;
 
@@ -29,7 +31,19 @@ class _HomeState extends State<Home> {
       loading = true;
     });
     stock.clear();
+    sto.clear();
 
+    // final responseStock =
+    //     await http.get('https://api.iextrading.com/1.0/stock/AMD/previous');
+    // if (responseStock.statusCode == 200) {
+    //   final dataSt = jsonDecode(responseStock.body);
+    //   setState(() {
+    //     for (Map i in dataSt) {
+    //       sto.add(Previos.fromJson(i));
+    //       loading = false;
+    //     }
+    //   });
+    // }
     final response =
         await http.get('https://api.iextrading.com/1.0/ref-data/symbols');
     if (response.statusCode == 200) {
@@ -60,9 +74,12 @@ class _HomeState extends State<Home> {
     setState(() {});
   }
 
+  void navigateStock(String symbol) {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => Stocks()));
+  }
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     fetchData();
   }
@@ -72,14 +89,20 @@ class _HomeState extends State<Home> {
     return Scaffold(
       backgroundColor: Color(0xFF5C6DC0),
       appBar: AppBar(
-        title: Center(child: Text('TEST')),
+        title: Center(child: Text('${widget.user.email}')),
       ),
       body: Container(
+        padding: EdgeInsets.all(10.0),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [const Color(0xFFEF9A9A), const Color(0xFF5C6DC0)],
+            begin: Alignment.bottomCenter,
+            end: Alignment.topCenter,
+          ),
+        ),
         child: Column(
           children: <Widget>[
             Container(
-              padding: EdgeInsets.all(10.0),
-              color: Color(0xFF5C6DC0),
               child: Card(
                 child: ListTile(
                   leading: Icon(Icons.search),
@@ -111,26 +134,62 @@ class _HomeState extends State<Home> {
                             itemCount: stock.length,
                             itemBuilder: (context, index) {
                               final sto = stock[index];
-                              var networkImage = NetworkImage(
-                                  'https://storage.googleapis.com/iex/api/logos/${sto.symbol}.png');
+                              
+                              var stockRes = stock[index].symbol;
+                              // var networkImage = NetworkImage(
+                              //     'https://storage.googleapis.com/iex/api/logos/${sto.symbol}.png');
                               return Container(
                                   child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                                  CircleAvatar(
-                                    backgroundImage: networkImage,
-                                    radius: 30,
-                                  ),
+                                  // CircleAvatar(
+                                  //   backgroundImage: networkImage,
+                                  //   radius: 30,
+                                  // ),
                                   SizedBox(
-                                    height: 2.0,
+                                    height: 5.0,
                                   ),
-                                  Text(
-                                    sto.name,
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => Stocks(text: sto.symbol)));
+                                    },
+                                    child: Card(
+                                      color: Colors.black,
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: <Widget>[
+                                          Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 5.0, horizontal: 3.0),
+                                          ),
+                                          Flexible(
+                                            child: Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                  vertical: 5.0,
+                                                  horizontal: 3.0),
+                                              child: Text(
+                                                sto.name,
+                                                overflow: TextOverflow.ellipsis,
+                                                softWrap: true,
+                                                style: TextStyle(
+                                                    fontSize: 18,
+                                                    color: Colors.white,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                                   ),
+                                  // Divider(
+                                  //   height: 2.0,
+                                  //   color: Colors.grey,
+                                  // ),
                                 ],
                               ));
                             },
@@ -144,12 +203,16 @@ class _HomeState extends State<Home> {
 }
 
 class ListTwo extends StatelessWidget {
+
+  
+
   const ListTwo({
     Key key,
     @required this.search,
   }) : super(key: key);
 
   final List<Shares> search;
+  
 
   @override
   Widget build(BuildContext context) {
@@ -157,25 +220,52 @@ class ListTwo extends StatelessWidget {
       itemCount: search.length,
       itemBuilder: (context, index) {
         final sto2 = search[index];
-        var networkImage = NetworkImage(
-            'https://storage.googleapis.com/iex/api/logos/${sto2.symbol}.png');
+        // var networkImage = NetworkImage(
+        //     'https://storage.googleapis.com/iex/api/logos/${sto2.symbol}.png');
         return Container(
             child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            CircleAvatar(
-              backgroundImage: networkImage,
-              radius: 30,
-            ),
+            // CircleAvatar(
+            //   backgroundImage: networkImage,
+            //   radius: 30,
+            // ),
             SizedBox(
               height: 2.0,
             ),
-            Text(
-              sto2.name,
-              style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold),
+            GestureDetector(
+              onTap: () {
+              value: sto2.isEnabled;
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => Stocks()));
+              },
+              child: Card(
+                color: Colors.black,
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: <Widget>[
+                    Padding(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 5.0, horizontal: 3.0),
+                    ),
+                    Flexible(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                            vertical: 5.0, horizontal: 3.0),
+                        child: Text(
+                          sto2.name,
+                          overflow: TextOverflow.ellipsis,
+                          softWrap: true,
+                          style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ],
         ));
