@@ -18,8 +18,6 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
-// const key = 'GGGY02OO6F2TGGOC';
-
 class _HomeState extends State<Home> {
   List<Shares> stock = [];
   List<Previos> sto = [];
@@ -33,17 +31,6 @@ class _HomeState extends State<Home> {
     stock.clear();
     sto.clear();
 
-    // final responseStock =
-    //     await http.get('https://api.iextrading.com/1.0/stock/AMD/previous');
-    // if (responseStock.statusCode == 200) {
-    //   final dataSt = jsonDecode(responseStock.body);
-    //   setState(() {
-    //     for (Map i in dataSt) {
-    //       sto.add(Previos.fromJson(i));
-    //       loading = false;
-    //     }
-    //   });
-    // }
     final response =
         await http.get('https://api.iextrading.com/1.0/ref-data/symbols');
     if (response.statusCode == 200) {
@@ -75,7 +62,7 @@ class _HomeState extends State<Home> {
   }
 
   void navigateStock(String symbol) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => Stocks()));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => MyApp()));
   }
 
   @override
@@ -134,18 +121,12 @@ class _HomeState extends State<Home> {
                             itemCount: stock.length,
                             itemBuilder: (context, index) {
                               final sto = stock[index];
-                              
+
                               var stockRes = stock[index].symbol;
-                              // var networkImage = NetworkImage(
-                              //     'https://storage.googleapis.com/iex/api/logos/${sto.symbol}.png');
                               return Container(
                                   child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                                  // CircleAvatar(
-                                  //   backgroundImage: networkImage,
-                                  //   radius: 30,
-                                  // ),
                                   SizedBox(
                                     height: 5.0,
                                   ),
@@ -154,7 +135,8 @@ class _HomeState extends State<Home> {
                                       Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                              builder: (context) => Stocks(text: sto.symbol)));
+                                              builder: (context) =>
+                                                  MyApp(text: sto.symbol)));
                                     },
                                     child: Card(
                                       color: Colors.black,
@@ -186,10 +168,6 @@ class _HomeState extends State<Home> {
                                       ),
                                     ),
                                   ),
-                                  // Divider(
-                                  //   height: 2.0,
-                                  //   color: Colors.grey,
-                                  // ),
                                 ],
                               ));
                             },
@@ -203,16 +181,12 @@ class _HomeState extends State<Home> {
 }
 
 class ListTwo extends StatelessWidget {
-
-  
-
   const ListTwo({
     Key key,
     @required this.search,
   }) : super(key: key);
 
   final List<Shares> search;
-  
 
   @override
   Widget build(BuildContext context) {
@@ -220,24 +194,23 @@ class ListTwo extends StatelessWidget {
       itemCount: search.length,
       itemBuilder: (context, index) {
         final sto2 = search[index];
-        // var networkImage = NetworkImage(
-        //     'https://storage.googleapis.com/iex/api/logos/${sto2.symbol}.png');
         return Container(
             child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            // CircleAvatar(
-            //   backgroundImage: networkImage,
-            //   radius: 30,
-            // ),
             SizedBox(
               height: 2.0,
             ),
             GestureDetector(
               onTap: () {
-              value: sto2.isEnabled;
+                value:
+                sto2.isEnabled;
                 Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => Stocks()));
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => MyApp(
+                              text: sto2.symbol,
+                            )));
               },
               child: Card(
                 color: Colors.black,
