@@ -8,73 +8,51 @@ import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
 
-class User {
-  // final String symbol;
-  // final String date;
-  
-  // final double open;
-  // final double high;
-  // final double low;
-  // final double close;
-  // final int volume;
-  // final int unadjustedVolume;
-  // final double change;
-  // final double changePercent;
-  // final double vwap;
-  final String symbol;
- final String companyName;
- final String primaryExchange;
- final String sector;
- final String calculationPrice;
- final double open;
- final int openTime;
- final double close;
- final int closeTime;
- final double high;
- final double low;
- final double latestPrice;
- final String latestSource;
- final String latestTime;
- final int latestUpdate;
- final int latestVolume;
- final double iexRealtimePrice;
- final int iexRealtimeSize;
- final int iexLastUpdated;
- final double delayedPrice;
- final int delayedPriceTime;
- final double extendedPrice;
- final int extendedChange;
- final int extendedChangePercent;
- final int extendedPriceTime;
- final double previousClose;
- final double change;
- final double changePercent;
- final double iexMarketPercent;
- final int iexVolume;
- final int avgTotalVolume;
- final int iexBidPrice;
- final int iexBidSize;
- final double iexAskPrice;
- final int iexAskSize;
- final int marketCap;
- final double peRatio;
- final double week52High;
- final int week52Low;
- final double ytdChange;
+class Stock {
+  var  symbol;
+  var  companyName;
+  var  primaryExchange;
+  var  sector;
+  var  calculationPrice;
+  var  open;
+  var openTime;
+  var  close;
+  var closeTime;
+  var  high;
+  var  low;
+  var  latestPrice;
+  var  latestSource;
+  var  latestTime;
+  var latestUpdate;
+  var latestVolume;
+  var  iexRealtimePrice;
+  var iexRealtimeSize;
+  var iexLastUpdated;
+  var  delayedPrice;
+  var delayedPriceTime;
+  var  extendedPrice;
+  var extendedChange;
+  var  extendedChangePercent;
+  var extendedPriceTime;
+  var  previousClose;
+  var  change;
+  var  changePercent;
+  var  iexMarketPercent;
+  var iexVolume;
+  var avgTotalVolume;
+  var iexBidPrice;
+  var iexBidSize;
+  var  iexAskPrice;
+  var iexAskSize;
+  var marketCap;
+  var  peRatio;
+  var  week52High;
+  var  week52Low;
+  var  ytdChange;
 
-  User({
-    // this.symbol,
-    //   this.date,
-      
-    //   this.open,
-    //   this.high,
-    //   this.low,
-    //   this.close,
-    //   this.volume,
-    //   this.unadjustedVolume,
-    //   this.change,
-    //   this.changePercent,
-    //   this.vwap
+  Stock(
+      {
+     
       this.symbol,
       this.companyName,
       this.primaryExchange,
@@ -114,62 +92,51 @@ class User {
       this.peRatio,
       this.week52High,
       this.week52Low,
-      this.ytdChange
-      });
+      this.ytdChange});
 
-  factory User.fromJson(Map<String, dynamic> json) {
-    return User(
-      symbol: json['symbol'] as String,
-      companyName: json['companyName'] as String,
-      primaryExchange: json['primaryExchange'] as String,
-      sector: json['sector'] as String,
-      calculationPrice: json['calculationPrice'] as String,
-      open: json['open'] as double,
-      openTime: json['openTime'] as int,
-      close: json['close'] as double,
-      closeTime: json['closeTime'],
-      high: json['high'],
-      low: json['low'],
-      latestPrice: json['latestPrice'],
-      latestSource: json['latestSource'],
-      latestTime: json['latestTime'],
-      latestUpdate: json['latestUpdate'],
-      latestVolume: json['latestVolume'],
-      iexRealtimePrice: json['iexRealtimePrice'],
-      iexRealtimeSize: json['iexRealtimeSize'],
-      iexLastUpdated: json['iexLastUpdated'],
-      delayedPrice: json['delayedPrice'],
-      delayedPriceTime: json['delayedPriceTime'],
-      extendedPrice: json['extendedPrice'],
-      extendedChange: json['extendedChange'],
-      extendedChangePercent: json['extendedChangePercent'],
-      extendedPriceTime: json['extendedPriceTime'],
-      previousClose: json['previousClose'],
-      change: json['change'],
-      changePercent: json['changePercent'],
-      iexMarketPercent: json['iexMarketPercent'],
-      iexVolume: json['iexVolume'],
-      avgTotalVolume: json['avgTotalVolume'],
-      iexBidPrice: json['iexBidPrice'],
-      iexBidSize: json['iexBidSize'],
-      iexAskPrice: json['iexAskPrice'],
-      iexAskSize: json['iexAskSize'],
-      marketCap: json['marketCap'],
-      peRatio: json['peRatio'],
-      week52High: json['week52High'],
-      week52Low: json['week52Low'],
-      ytdChange: json['ytdChange'],
-      // symbol: json['symbol'] as String,
-      // date: json['date'] as String,
-      // open: json['open'] as double,
-      // high: json['hing'] as double,
-      // low: json['low'] as double,
-      // close: json['close'] as double,
-      // volume: json['volume'] as int,
-      // unadjustedVolume: json['unadjustedVolume'] as int,
-      // change: json['change'] as double,
-      // changePercent: json['changePercent'] as double,
-      // vwap: json['vwap'] as double,
+  factory Stock.fromJson(Map<String, dynamic> json) {
+    return Stock(
+      symbol: json['symbol'] ,
+      companyName: json['companyName'] ,
+      primaryExchange: json['primaryExchange'] ,
+      sector: json['sector'] ,
+      calculationPrice: json['calculationPrice'] ,
+      open: json['open'] ,
+      openTime: json['openTime'] ,
+      close: json['close'] ,
+      closeTime: json['closeTime'] ,
+      high: json['high'] ,
+      low: json['low'] ,
+      latestPrice: json['latestPrice'] ,
+      latestSource: json['latestSource'] ,
+      latestTime: json['latestTime'] ,
+      latestUpdate: json['latestUpdate'] ,
+      latestVolume: json['latestVolume'] ,
+      iexRealtimePrice: json['iexRealtimePrice'] ,
+      iexRealtimeSize: json['iexRealtimeSize'] ,
+      iexLastUpdated: json['iexLastUpdated'] ,
+      delayedPrice: json['delayedPrice'] ,
+      delayedPriceTime: json['delayedPriceTime'] ,
+      extendedPrice: json['extendedPrice'] ,
+      extendedChange: json['extendedChange'] ,
+      extendedChangePercent: json['extendedChangePercent'] ,
+      extendedPriceTime: json['extendedPriceTime'] ,
+      previousClose: json['previousClose'] ,
+      change: json['change'] ,
+      changePercent: json['changePercent'] ,
+      iexMarketPercent: json['iexMarketPercent'] ,
+      iexVolume: json['iexVolume'] ,
+      avgTotalVolume: json['avgTotalVolume'] ,
+      iexBidPrice: json['iexBidPrice'] ,
+      iexBidSize: json['iexBidSize'] ,
+      iexAskPrice: json['iexAskPrice'] ,
+      iexAskSize: json['iexAskSize'] ,
+      marketCap: json['marketCap'] ,
+      peRatio: json['peRatio'] ,
+      week52High: json['week52High'] ,
+      week52Low: json['week52Low'] ,
+      ytdChange: json['ytdChange'] ,
+     
     );
   }
 }
@@ -196,20 +163,36 @@ class _MyHomePageState extends State<MyHomePage> {
   String text3;
 
   _MyHomePageState({this.text3});
- 
-  void _updateData() {
-    http
-        .get('https://api.iextrading.com/1.0/stock/$text3/quote?displayPercent=true')
-        .then((http.Response response) {
-      if (response.statusCode == 200) {
-        setState(() {
-          _user = User.fromJson(json.decode(response.body));
-        });
-      }
-    });
+//   void _updateData() {
+//   http.get('https://api.iextrading.com/1.0/stock/$text3/quote')
+//     .then(_processResponse);
+// }
+
+// void _processResponse(http.Response response) {
+//   if (response.statusCode == 200) {
+//     setState(() {
+//       _user = Stock.fromJson(json.decode(response.body));
+//     });
+//   }
+// }
+  Stock _user;
+  void _updateData() async {
+    String url = 'https://api.iextrading.com/1.0/stock/$text3/quote';
+    var res = await http.get(url, headers: {"Accept": "application/json"});
+    // var data = json.decode(res.body);
+    if (res.statusCode == 200) {
+      setState(() {
+        _user = Stock.fromJson(json.decode(res.body));
+      });
+    } else {
+      Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+    ;
   }
-  User _user;
-  Map data;
+
+
   @override
   void initState() {
     super.initState();
@@ -223,8 +206,7 @@ class _MyHomePageState extends State<MyHomePage> {
         title: new Text('test'),
       ),
       body: Container(
-        child: Text(_user?.symbol?.toString() ?? '',
-      ),
+        child: Text(_user?.companyName?.toString() ?? '',),
       ),
     );
   }
