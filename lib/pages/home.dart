@@ -122,7 +122,6 @@ class _HomeState extends State<Home> {
                             itemBuilder: (context, index) {
                               final sto = stock[index];
 
-                              var stockRes = stock[index].symbol;
                               return Container(
                                   child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -203,7 +202,6 @@ class ListTwo extends StatelessWidget {
             ),
             GestureDetector(
               onTap: () {
-                value:
                 sto2.isEnabled;
                 Navigator.push(
                     context,
