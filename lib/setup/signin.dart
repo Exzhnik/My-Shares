@@ -14,23 +14,23 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future<FirebaseUser> _handleSignIn() async {
-  final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
-  final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+    final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
+    final GoogleSignInAuthentication googleAuth =
+        await googleUser.authentication;
 
-  final AuthCredential credential = GoogleAuthProvider.getCredential(
-    accessToken: googleAuth.accessToken,
-    idToken: googleAuth.idToken,
-  );
-
-  final FirebaseUser user = await _auth.signInWithCredential(credential);
-  print("signed in " + user.displayName);
-  return user;
-}
+    final AuthCredential credential = GoogleAuthProvider.getCredential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+    Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+    final FirebaseUser user = await _auth.signInWithCredential(credential);
+    print("signed in " + user.displayName);
+    return user;
+  }
 
   /*SingIn Firebase email & password */
   String _email, _password;
@@ -59,6 +59,18 @@ class _LoginPageState extends State<LoginPage> {
         backgroundColor: Colors.transparent,
         radius: 48.0,
         child: Image.asset('res/icon/money.png'),
+      ),
+    );
+    final google = InkWell(
+      onTap: () {
+        _handleSignIn()
+            .then((FirebaseUser user) => print(user))
+            .catchError((e) => print(e));
+      },
+      child: CircleAvatar(
+        backgroundColor: Colors.transparent,
+        radius: 14.0,
+        child: Image.asset('res/icon/search.png'),
       ),
     );
 
@@ -114,11 +126,7 @@ class _LoginPageState extends State<LoginPage> {
 
     final labForgot = FlatButton(
       child: Text('Forgot password?', style: TextStyle(color: Colors.black54)),
-      onPressed: () {
-        _handleSignIn()
-    .then((FirebaseUser user) => print(user))
-    .catchError((e) => print(e));
-      },
+      onPressed: () {},
     );
 
     return Scaffold(
@@ -131,6 +139,7 @@ class _LoginPageState extends State<LoginPage> {
             email: email,
             password: password,
             butLogin: butLogin,
+            google: google,
             reg: reg,
             labForgot: labForgot),
       ],

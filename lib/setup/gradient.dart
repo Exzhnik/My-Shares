@@ -8,6 +8,7 @@ class LogGradient extends StatelessWidget {
     @required this.email,
     @required this.password,
     @required this.butLogin,
+    @required this.google,
     @required this.reg,
     @required this.labForgot,
   })  : _formKey = formKey,
@@ -18,6 +19,7 @@ class LogGradient extends StatelessWidget {
   final TextFormField email;
   final TextFormField password;
   final Padding butLogin;
+  final InkWell google;
   final FlatButton reg;
   final FlatButton labForgot;
 
@@ -60,6 +62,7 @@ class LogGradient extends StatelessWidget {
                 height: 24.0,
               ),
               butLogin,
+              google,
               reg,
               labForgot
             ],

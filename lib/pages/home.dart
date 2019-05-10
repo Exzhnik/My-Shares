@@ -74,11 +74,9 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF5C6DC0),
-      appBar: AppBar(
-        title: Center(child: Text('${widget.user.email}')),
-      ),
+      
       body: Container(
+        
         padding: EdgeInsets.all(10.0),
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -87,8 +85,10 @@ class _HomeState extends State<Home> {
             end: Alignment.topCenter,
           ),
         ),
+        
         child: Column(
           children: <Widget>[
+            SizedBox(height: 30.0,),
             Container(
               child: Card(
                 child: ListTile(
