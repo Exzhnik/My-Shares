@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:my_shares/pages/home.dart';
+import 'package:my_shares/pages/registration.dart';
 import 'package:my_shares/setup/gradient.dart';
 
 class LoginPage extends StatefulWidget {
@@ -19,8 +20,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<FirebaseUser> _handleSignIn() async {
     final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
-    final GoogleSignInAuthentication googleAuth =
-        await googleUser.authentication;
+    final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
 
     final AuthCredential credential = GoogleAuthProvider.getCredential(
       accessToken: googleAuth.accessToken,
@@ -120,8 +120,11 @@ class _LoginPageState extends State<LoginPage> {
     );
 
     final reg = FlatButton(
-      child: Text('Registration', style: TextStyle(color: Colors.black54)),
-      onPressed: () {},
+      child: Text('Create an account', style: TextStyle(color: Colors.black54)),
+      onPressed: () {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => RegisterForm()));
+      },
     );
 
     final labForgot = FlatButton(
