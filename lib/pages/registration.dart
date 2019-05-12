@@ -1,6 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'dart:async';
+
+import 'package:my_shares/setup/signin.dart';
 
 class RegisterForm extends StatefulWidget {
   const RegisterForm({Key key}) : super(key: key);
@@ -9,102 +12,100 @@ class RegisterForm extends StatefulWidget {
   _RegisterFormState createState() => _RegisterFormState();
 }
 
-enum FormType { login, register }
-
 class _RegisterFormState extends State<RegisterForm> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String _email, _password;
-  
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  // bool validateSave() {
-  //   final form = formKey.currentState;
-  //   if (form.validate()) {
-  //     form.save();
-  //     return true;
-  //   }
-  //   return false;
-  // }
-
-  void moveRegister() async {
-    final formState = formKey.currentState;
-    if (formState.validate()) {
-      formState.save();
+  void signUp() async {
+    if (_formKey.currentState.validate()) {
+      _formKey.currentState.save();
       try {
-        FirebaseUser user = await FirebaseAuth.instance
+        await FirebaseAuth.instance
             .createUserWithEmailAndPassword(email: _email, password: _password);
-        print('Register user: ${user.uid}'); // Navigator.push(
-        //     context, MaterialPageRoute(builder: (context) => Home(user: user)));
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => LoginPage()));
       } catch (e) {
         print(e.message);
       }
     }
   }
- 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        padding: EdgeInsets.only(left: 24, right: 24),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [const Color(0xFFEF9A9A), const Color(0xFF5C6DC0)],
-            begin: Alignment.bottomCenter,
-            end: Alignment.topCenter,
+      body: Form(
+        key: _formKey,
+        child: Container(
+          padding: EdgeInsets.only(left: 24, right: 24),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [const Color(0xFFEF9A9A), const Color(0xFF5C6DC0)],
+              begin: Alignment.bottomCenter,
+              end: Alignment.topCenter,
+            ),
           ),
-        ),
-        child: Center(
-          child: ListView(
-            children: <Widget>[
-              SizedBox(
-                height: 50.0,
-              ),
-              TextFormField(
-                validator: (value) => value.isEmpty?'Email can\'t be empty': null,
-                keyboardType: TextInputType.emailAddress,
-                autofocus: false,
-                onSaved: (value) => _email = value,
-                decoration: InputDecoration(
-                  hintText: 'Email',
-                  contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(32)),
+          child: Center(
+            child: ListView(
+              children: <Widget>[
+                SizedBox(
+                  height: 50.0,
                 ),
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
-              TextFormField(
-                validator: (value) => value.isEmpty?'Password can\'t be empty': null,
-                onSaved: (value) => _password = value,
-                autofocus: false,
-                obscureText: true,
-                decoration: InputDecoration(
-                  hintText: 'Password',
-                  contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(32)),
-                ),
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
-              Container(
-                child: RaisedButton(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(24),
+                TextFormField(
+                  validator: (input) {
+                    if (input.isEmpty) {
+                      return 'Введите email';
+                    }
+                  },
+                  keyboardType: TextInputType.emailAddress,
+                  autofocus: false,
+                  onSaved: (input) => _email = input,
+                  decoration: InputDecoration(
+                    hintText: 'Email',
+                    contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(32)),
                   ),
-                  onPressed: moveRegister,
-                  padding: EdgeInsets.all(12),
-                  color: Colors.lightBlueAccent,
-                  child: Text('Create an account',
-                      style: TextStyle(color: Colors.white)),
                 ),
-              ),
-            ],
+                SizedBox(
+                  height: 20.0,
+                ),
+                TextFormField(
+                  validator: (input) {
+                    if (input.length < 6) {
+                      return 'Password can\'t be empty';
+                    }
+                  },
+                  //  => input.isEmpty ? 'Password can\'t be empty' : null,
+                  onSaved: (input) => _password = input,
+                  autofocus: false,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    hintText: 'Password',
+                    contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(32)),
+                  ),
+                ),
+                SizedBox(
+                  height: 20.0,
+                ),
+                Container(
+                  child: RaisedButton(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(24),
+                    ),
+                    onPressed: signUp,
+                    padding: EdgeInsets.all(12),
+                    color: Colors.lightBlueAccent,
+                    child: Text('Create an account',
+                        style: TextStyle(color: Colors.white)),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
-      // ),
     );
   }
 }

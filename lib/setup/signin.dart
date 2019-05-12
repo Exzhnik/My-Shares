@@ -34,12 +34,12 @@ class _LoginPageState extends State<LoginPage> {
 
   /*SingIn Firebase email & password */
   String _email, _password;
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _keyForm = GlobalKey<FormState>();
 /*SingIn Firebase email & password */
   Future<void> signIn() async {
-    final formState = _formKey.currentState;
-    if (formState.validate()) {
-      formState.save();
+    final stateForm = _keyForm.currentState;
+    if (stateForm.validate()) {
+      stateForm.save();
       try {
         FirebaseUser user = await FirebaseAuth.instance
             .signInWithEmailAndPassword(email: _email, password: _password);
@@ -137,7 +137,7 @@ class _LoginPageState extends State<LoginPage> {
       fit: StackFit.expand,
       children: <Widget>[
         new LogGradient(
-            formKey: _formKey,
+            formKey: _keyForm,
             logo: logo,
             email: email,
             password: password,
