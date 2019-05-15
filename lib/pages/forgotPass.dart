@@ -4,23 +4,22 @@ import 'package:flutter/rendering.dart';
 
 import 'package:my_shares/setup/signin.dart';
 
-class RegisterForm extends StatefulWidget {
-  const RegisterForm({Key key}) : super(key: key);
+class ForgotPass extends StatefulWidget {
+  const ForgotPass({Key key}) : super(key: key);
 
   @override
-  _RegisterFormState createState() => _RegisterFormState();
+  _ForgotPassState createState() => _ForgotPassState();
 }
 
-class _RegisterFormState extends State<RegisterForm> {
+class _ForgotPassState extends State<ForgotPass> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  String _email, _password;
+  String _email;
 
-  void signUp() async {
+  void resetPass() async {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
       try {
-        await FirebaseAuth.instance
-            .createUserWithEmailAndPassword(email: _email, password: _password);
+        await FirebaseAuth.instance.sendPasswordResetEmail(email: _email);
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => LoginPage()));
       } catch (e) {
@@ -46,7 +45,7 @@ class _RegisterFormState extends State<RegisterForm> {
           child: Center(
             child: ListView(
               children: <Widget>[
-                 SizedBox(
+                SizedBox(
                   height: 50.0,
                 ),
                 CircleAvatar(
@@ -76,31 +75,12 @@ class _RegisterFormState extends State<RegisterForm> {
                 SizedBox(
                   height: 20.0,
                 ),
-                TextFormField(
-                  validator: (input) {
-                    if (input.length < 6) {
-                      return 'Password can\'t be empty';
-                    }
-                  },
-                  onSaved: (input) => _password = input,
-                  autofocus: false,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    hintText: 'Password',
-                    contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(32)),
-                  ),
-                ),
-                SizedBox(
-                  height: 20.0,
-                ),
                 Container(
                   child: RaisedButton(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(24),
                     ),
-                    onPressed: signUp,
+                    onPressed: resetPass,
                     padding: EdgeInsets.all(12),
                     color: Colors.lightBlueAccent,
                     child: Text('Create an account',

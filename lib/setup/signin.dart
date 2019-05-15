@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:my_shares/pages/forgotPass.dart';
 import 'package:my_shares/pages/home.dart';
 import 'package:my_shares/pages/registration.dart';
 import 'package:my_shares/setup/gradient.dart';
@@ -20,7 +21,8 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<FirebaseUser> _handleSignIn() async {
     final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
-    final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+    final GoogleSignInAuthentication googleAuth =
+        await googleUser.authentication;
 
     final AuthCredential credential = GoogleAuthProvider.getCredential(
       accessToken: googleAuth.accessToken,
@@ -77,7 +79,7 @@ class _LoginPageState extends State<LoginPage> {
     final email = TextFormField(
       validator: (input) {
         if (input.isEmpty) {
-          return 'Введите email';
+          return 'Email can\'t be empty';
         }
       },
       keyboardType: TextInputType.emailAddress,
@@ -86,14 +88,16 @@ class _LoginPageState extends State<LoginPage> {
       decoration: InputDecoration(
         hintText: 'Email',
         contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(32)),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(32),
+        ),
       ),
     );
 
     final password = TextFormField(
       validator: (input) {
         if (input.length < 6) {
-          return 'Введите пароль не менее 6 символов';
+          return 'Password can\'t be empty';
         }
       },
       onSaved: (input) => _password = input,
@@ -115,12 +119,12 @@ class _LoginPageState extends State<LoginPage> {
         onPressed: signIn,
         padding: EdgeInsets.all(12),
         color: Colors.lightBlueAccent,
-        child: Text('Log In', style: TextStyle(color: Colors.white)),
+        child: Text('Login', style: TextStyle(color: Colors.white)),
       ),
     );
 
     final reg = FlatButton(
-      child: Text('Create an account', style: TextStyle(color: Colors.black54)),
+      child: Text('Sing Up', style: TextStyle(color: Colors.black54)),
       onPressed: () {
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => RegisterForm()));
@@ -128,8 +132,11 @@ class _LoginPageState extends State<LoginPage> {
     );
 
     final labForgot = FlatButton(
-      child: Text('Forgot password?', style: TextStyle(color: Colors.black54)),
-      onPressed: () {},
+      child: Text('Forgot Password?', style: TextStyle(color: Colors.black54)),
+      onPressed: () {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => ForgotPass()));
+      },
     );
 
     return Scaffold(

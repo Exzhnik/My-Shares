@@ -3,8 +3,17 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_candlesticks/flutter_candlesticks.dart';
 
 import 'package:my_shares/setup/previos.dart';
+
+List sampleData = [
+  {"open": 50.0, "high": 100.0, "low": 40.0, "close": 80, "volumeto": 5000.0},
+  {"open": 80.0, "high": 90.0, "low": 55.0, "close": 65, "volumeto": 4000.0},
+  {"open": 65.0, "high": 120.0, "low": 60.0, "close": 90, "volumeto": 7000.0},
+  {"open": 90.0, "high": 95.0, "low": 85.0, "close": 80, "volumeto": 2000.0},
+  {"open": 80.0, "high": 85.0, "low": 40.0, "close": 50, "volumeto": 3000.0},
+];
 
 class MyApp extends StatelessWidget {
   String text;
@@ -53,6 +62,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: 500.0,
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [const Color(0xFFEF9A9A), const Color(0xFF5C6DC0)],
@@ -68,6 +78,13 @@ class _MyHomePageState extends State<MyHomePage> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
+              OHLCVGraph(
+                  data: sampleData,
+    enableGridLines: true,
+    volumeProp: 0.1,
+    gridLineAmount: 5,
+    gridLineColor: Colors.grey[300],
+    gridLineLabelColor: Colors.grey),
               ListTile(
                   title: Text(
                     _company?.companyName?.toString() ?? '',
