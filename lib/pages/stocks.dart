@@ -78,14 +78,7 @@ class _MyHomePageState extends State<MyHomePage> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              // OHLCVGraph(
-    //               data: sampleData,
-    // enableGridLines: true,
-    // volumeProp: 0.1,
-    // gridLineAmount: 5,
-    // gridLineColor: Colors.grey[300],
-    // gridLineLabelColor: Colors.grey),
-              ListTile(
+               ListTile(
                   title: Text(
                     _company?.companyName?.toString() ?? '',
                     style: TextStyle(fontWeight: FontWeight.bold),
